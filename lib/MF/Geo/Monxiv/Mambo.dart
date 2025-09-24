@@ -14,7 +14,7 @@ class Mambo {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('$name: $message'),
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 3),
         action: SnackBarAction(
           label: _isMuted ? '开音效' : '闭嘴！',
           onPressed: () => toggleMute(),

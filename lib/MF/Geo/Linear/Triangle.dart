@@ -29,6 +29,7 @@ class Triangle{
   Vec get iO { //内心
     return (a * aLen + b * bLen + c * cLen) / cir;
   }
+  
   Vec get oO { //外心
     num m = 2 * ( pow(dotUV,2) - powV*powU );
     num uL = (powV*(dotUV-powU)) / m;

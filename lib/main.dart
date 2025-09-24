@@ -40,37 +40,10 @@ class MyPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     canvas.drawColor(monxiv.bgc, BlendMode.srcOver);
-
     IntersectionSolver iSolver = IntersectionSolver();
-
     Circle c = Circle(Vec(), Vec(2.5));//创建圆
     monxiv.drawCircle(c, canvas);//画
 
-    Conic0 c0 = Conic0(Vec(5,5),Vec(2),Vec(1,1));
-    //monxiv.drawConic0(c0, canvas);
-    //monxiv.drawDPoint(c0.F, canvas);
-
-    monxiv.drawConic(c0.conic, canvas);
-
-    Conic2 c2 = Conic2(Vec(),Vec(1),Vec(0,1));
-    //monxiv.drawConic2(c2, canvas);
-    //monxiv.drawDPoint(c2.F, canvas);
-
-    monxiv.drawPoint(Vec(), canvas);
-    //monxiv.drawPoint(Vec(nan,nan), canvas);
-
-    Line l1 = Line(Vec(1,-5),Vec(-1,1));
-    Line l2 = Line(Vec(-1,5),Vec(1,2));
-    monxiv.drawLine(l1, canvas);
-    monxiv.drawLine(l2, canvas);
-
-    Vec i_l1_l2 = IntersectionSolver.Line_Line(l1, l2);
-    //monxiv.drawPoint(i_l1_l2, canvas);
-
-    DPoint i_c0_l1 = IntersectionSolver.Conic0_Line(c0, l1);
-    //monxiv.drawDPoint(i_c0_l1, canvas);
-
-    //mambo(i_c0_l1.p1.toString());
   }
 
   @override
@@ -79,20 +52,16 @@ class MyPainter extends CustomPainter {
   }
 }
 
+
+
 class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
 
   // 使用Monxiv管理视图变换
   Monxiv monxiv = Monxiv()
-   ..reset()
-  ..infoMode = true;
-  List<num>  monxivLamRestriction = [.5,5e3];
+    ..reset()
+    ..infoMode = true;
 
-  // 用于处理手势
-  Offset _startLocalPosition = Offset.zero;
-  Vec _startMonxivP = Vec();
-  double _startMonxivLam = 1.0;
-  bool _isDragging = false;
 
   @override
   void initState() {
@@ -118,61 +87,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
 
 
-  // 处理缩放开始
-  void _handleScaleStart(ScaleStartDetails details) {
-    setState(() {
-      _isDragging = true;
-      _startLocalPosition = details.localFocalPoint;
-      _startMonxivP = Vec(monxiv.p.x, monxiv.p.y); // 保存当前平移状态
-      _startMonxivLam = monxiv.lam.toDouble(); // 保存当前缩放状态
-    });
-  }
 
-  // 处理缩放更新（同时处理平移和缩放）
-  void _handleScaleUpdate(ScaleUpdateDetails details) {
-    setState(() {
-      if (details.scale != 1.0) {
-        // 缩放操作
-        double newScale = _startMonxivLam * details.scale;
-        // 限制缩放范围
-        monxiv.lam = newScale.clamp(monxivLamRestriction[0], monxivLamRestriction[1]);
-      } else if (details.localFocalPoint != _startLocalPosition) {
-        // 平移操作（没有缩放，只有位置变化）
-        Offset delta = details.localFocalPoint - _startLocalPosition;
-        monxiv.p = Vec(
-          _startMonxivP.x + delta.dx,
-          _startMonxivP.y + delta.dy,
-        );
-      }
-    });
-  }
-
-  // 处理缩放结束
-  void _handleScaleEnd(ScaleEndDetails details) {
-    setState(() {
-      _isDragging = false;
-    });
-  }
-
-  // 处理滚轮缩放
-  void _handlePointerSignal(PointerSignalEvent event) {
-    if (event is PointerScrollEvent) {
-      setState(() {
-        double zoomFactor = event.scrollDelta.dy > 0 ? 0.9 : 1.1;
-        double newScale = monxiv.lam * zoomFactor;
-        monxiv.lam = newScale.clamp(monxivLamRestriction[0], monxivLamRestriction[1]);
-      });
-    }
-  }
-
-  // 双击重置视图
-  void _handleDoubleTap() {
-    setState(() {
-      monxiv.reset();
-      monxiv.p = Vec(400, 400); // 重置到初始位置
-      monxiv.lam = 100; // 重置到初始缩放
-    });
-  }
 
   void _incrementCounter() {
     setState(() {});
@@ -180,6 +95,31 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     var dn = EquSolver.solveComplexQuadratic(i, i, i);
 
     mambo.ha('曼波${ dn.toString() }');
+
+    var gmkData = GMKData([]);
+    var gmkCore = GMKCore();
+    var ags = GMKStructure([
+      GMKProcess("P", GMKLabel("A"), [-1, 0, 0]),
+      GMKProcess("P", GMKLabel("B"), [1, 0, 0]),
+      GMKProcess("midP", GMKLabel("C"), [GMKLabel("A"), GMKLabel("B")])
+    ]);
+    gmkCore.loadStructure(ags);
+
+    gmkData = gmkCore.run;
+
+    Monxiv monxiv = Monxiv();
+
+    monxiv.drawGMKData(gmkData);
+
+
+
+
+
+
+
+
+
+
   }
 
   void _decrementCounter() {
@@ -189,8 +129,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   void _resetCounter() {
     setState(() {});
   }
-
-
 
   void _showInfoDialog() {
     showDialog(
@@ -268,12 +206,13 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
         ],
       ),
       body: Listener(
-        onPointerSignal: _handlePointerSignal,
+        onPointerSignal: monxiv.handlePointerSignal,
         child: GestureDetector(
-          onScaleStart: _handleScaleStart,
-          onScaleUpdate: _handleScaleUpdate,
-          onScaleEnd: _handleScaleEnd,
-          onDoubleTap: _handleDoubleTap,
+          onScaleStart: monxiv.handleScaleStart,
+          onScaleUpdate: monxiv.handleScaleUpdate,
+          onScaleEnd: monxiv.handleScaleEnd,
+          onDoubleTap: monxiv.handleDoubleTap,
+
           child: LayoutBuilder(
             builder: (context, constraints) {
               return CustomPaint(

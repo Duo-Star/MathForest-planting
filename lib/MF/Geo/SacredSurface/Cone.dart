@@ -13,7 +13,7 @@ class Cone {
   Vec n;  // 旋转轴方向向量（单位向量）
   Vec v;  // 曲面内任意直线方向向量
 
-  Cone({Vec? p, Vec? n, Vec? v})
+  Cone([Vec? p, Vec? n, Vec? v])
       : p = p ?? Vec(),  // 默认原点
         n = (n ?? Vec(0, 1)).unit,  // 确保单位向量
         v = (v ?? Vec(1, 0)).unit;  // 确保单位向量

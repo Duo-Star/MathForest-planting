@@ -1,5 +1,6 @@
 import 'dart:math';
 import 'dart:ui';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../Linear/Vec.dart';
@@ -13,13 +14,22 @@ import '../Fertile/DPoint.dart';
 
 
 class Monxiv {
-   Vec p = Vec();
-   num lam = 10;
-   bool infoMode = false;
+  Vec p = Vec();
+  num lam = 10;
+  bool infoMode = false;
 
-   final Paint defaultPaint = Paint()
-     ..color = Colors.amber..style = PaintingStyle.stroke..strokeWidth = 2.0;
-   Color bgc = Colors.blueGrey;
+  // 用于处理手势
+  Offset _startLocalPosition = Offset.zero;
+  Vec _startMonxivP = Vec();
+  double _startMonxivLam = 1.0;
+  bool _isDragging = false;
+  List<num>  monxivLamRestriction = [.5,5e3];
+
+
+
+  final Paint defaultPaint = Paint()
+    ..color = Colors.amber..style = PaintingStyle.stroke..strokeWidth = 2.0;
+  Color bgc = Colors.blueGrey;
 
 
   Vec C2S(Vec c){
@@ -48,104 +58,159 @@ class Monxiv {
     return true;
   }
 
-   bool drawPoint(Vec p, Canvas canvas, {Paint? paint}) {
-     final Paint usedPaint = paint ?? defaultPaint;
-     canvas.drawCircle(C2S(p).offset, 3, usedPaint);
-     if (infoMode) {
-       drawText(p.toString(), C2S(p), 12, 500.0, canvas);
-     }
-     return true;
-   }
-
-
-   bool drawDPoint(DPoint dP, Canvas canvas, {Paint? paint}) {
-     drawPoint(dP.p1, canvas);
-     drawPoint(dP.p2, canvas);
-     return true;
-   }
-
-
-   bool drawCircle(Circle circle, Canvas canvas, {Paint? paint}) {
-     final Paint usedPaint = paint ?? defaultPaint;
-     canvas.drawCircle(
-         C2S(circle.p).offset,
-         (circle.r*lam).toDouble(),
-         usedPaint
-     );
-     if (infoMode) {
-       drawText(circle.toString(), C2S(circle.p), 12, 500, canvas);
-     }
-     return true;
-   }
-
-
-   bool drawLine(Line l, Canvas canvas, {Paint? paint}) {
-     final Paint usedPaint = paint ?? defaultPaint;
-     num long = 114514/lam;
-     Offset p1 = C2S(l.indexPoint(-long)).offset;
-     Offset p2 = C2S(l.indexPoint(long)).offset;
-     canvas.drawLine(p1, p2, usedPaint);
-     if (infoMode) {
-       drawText(l.toString(), C2S(l.p), 12, 500, canvas);
-     }
-     return true;
-   }
-
-
-   bool drawConic0(Conic0 c0, Canvas canvas, {Paint? paint}) {
-     final Paint usedPaint = paint ?? defaultPaint;
-     Path p = Path();
-     Vec initVec = C2S(c0.indexPoint(0));
-     p.moveTo(initVec.x.toDouble(), initVec.y.toDouble());
-     for (double theta = 0.1; theta <= 2 * pi; theta += 0.1) {
-       Vec nowVec =C2S(c0.indexPoint(theta));
-       p.lineTo(nowVec.x.toDouble(), nowVec.y.toDouble());
-     }
-     p.close();
-     canvas.drawPath(p, usedPaint);
-     if (infoMode) {
-       drawText(c0.toString(), C2S(c0.p), 12, 500, canvas);
-     }
-     return true;
-   }
-
-   bool drawConic2(Conic2 c2, Canvas canvas, {Paint? paint}) {
-     final Paint usedPaint = paint ?? defaultPaint;
-     num dt = 0.1;
-     Path p1 = Path();
-     Vec initVec1 = C2S(c2.indexPoint(-(pow(e,dt)-1)*.3));
-     p1.moveTo(initVec1.x.toDouble(), initVec1.y.toDouble());
-     for (num t = dt*.1; t <= 380/lam +5; t += dt) {
-       Vec nowVec =C2S(c2.indexPoint(-(pow(e,t)-1)*.3));
-       p1.lineTo(nowVec.x.toDouble(), nowVec.y.toDouble());
-     }
-     canvas.drawPath(p1, usedPaint);
-
-     Path p2 = Path();
-     Vec initVec2 = C2S(c2.indexPoint(dt));
-     p2.moveTo(initVec2.x.toDouble(), initVec2.y.toDouble());
-     for (num t = dt; t <= 380/lam + 5; t += dt) {
-       Vec nowVec =C2S(c2.indexPoint((pow(e,t)-1)*.3));
-       p2.lineTo(nowVec.x.toDouble(), nowVec.y.toDouble());
-     }
-     canvas.drawPath(p2, usedPaint);
-     return true;
-   }
-
-   bool drawConic(Conic co, Canvas canvas, {Paint? paint}) {
-     if (co.type=="Conic0"){
-       drawConic0(co.reveal,canvas);
-     } else if (co.type=="Conic1") {
-       //drawConic1(co.reveal,canvas);
-     } else if (co.type=="Conic2") {
-       drawConic2(co.reveal,canvas);
-     } else if (co.type=="XLine") {
-       //drawXLine(co.reveal,canvas);
-     } else if (co.type=="HLine") {
-       //drawHLine(co.reveal,canvas);
-     }
+  bool drawPoint(Vec p, Canvas canvas, {Paint? paint}) {
+    final Paint usedPaint = paint ?? defaultPaint;
+    canvas.drawCircle(C2S(p).offset, 3, usedPaint);
+    if (infoMode) {
+      drawText(p.toString(), C2S(p), 12, 500.0, canvas);
+    }
     return true;
-   }
+  }
+
+
+  bool drawDPoint(DPoint dP, Canvas canvas, {Paint? paint}) {
+    drawPoint(dP.p1, canvas);
+    drawPoint(dP.p2, canvas);
+    return true;
+  }
+
+
+  bool drawCircle(Circle circle, Canvas canvas, {Paint? paint}) {
+    final Paint usedPaint = paint ?? defaultPaint;
+    canvas.drawCircle(
+        C2S(circle.p).offset,
+        (circle.r*lam).toDouble(),
+        usedPaint
+    );
+    if (infoMode) {
+      drawText(circle.toString(), C2S(circle.p), 12, 500, canvas);
+    }
+    return true;
+  }
+
+
+  bool drawLine(Line l, Canvas canvas, {Paint? paint}) {
+    final Paint usedPaint = paint ?? defaultPaint;
+    num long = 114514/lam;
+    Offset p1 = C2S(l.indexPoint(-long)).offset;
+    Offset p2 = C2S(l.indexPoint(long)).offset;
+    canvas.drawLine(p1, p2, usedPaint);
+    if (infoMode) {
+      drawText(l.toString(), C2S(l.p), 12, 500, canvas);
+    }
+    return true;
+  }
+
+
+  bool drawConic0(Conic0 c0, Canvas canvas, {Paint? paint}) {
+    final Paint usedPaint = paint ?? defaultPaint;
+    Path p = Path();
+    Vec initVec = C2S(c0.indexPoint(0));
+    p.moveTo(initVec.x.toDouble(), initVec.y.toDouble());
+    for (double theta = 0.1; theta <= 2 * pi; theta += 0.1) {
+      Vec nowVec =C2S(c0.indexPoint(theta));
+      p.lineTo(nowVec.x.toDouble(), nowVec.y.toDouble());
+    }
+    p.close();
+    canvas.drawPath(p, usedPaint);
+    if (infoMode) {
+      drawText(c0.toString(), C2S(c0.p), 12, 500, canvas);
+    }
+    return true;
+  }
+
+  bool drawConic2(Conic2 c2, Canvas canvas, {Paint? paint}) {
+    final Paint usedPaint = paint ?? defaultPaint;
+    num dt = 0.1;
+    Path p1 = Path();
+    Vec initVec1 = C2S(c2.indexPoint(-(pow(e,dt)-1)*.3));
+    p1.moveTo(initVec1.x.toDouble(), initVec1.y.toDouble());
+    for (num t = dt*.1; t <= 380/lam +5; t += dt) {
+      Vec nowVec =C2S(c2.indexPoint(-(pow(e,t)-1)*.3));
+      p1.lineTo(nowVec.x.toDouble(), nowVec.y.toDouble());
+    }
+    canvas.drawPath(p1, usedPaint);
+
+    Path p2 = Path();
+    Vec initVec2 = C2S(c2.indexPoint(dt));
+    p2.moveTo(initVec2.x.toDouble(), initVec2.y.toDouble());
+    for (num t = dt; t <= 380/lam + 5; t += dt) {
+      Vec nowVec =C2S(c2.indexPoint((pow(e,t)-1)*.3));
+      p2.lineTo(nowVec.x.toDouble(), nowVec.y.toDouble());
+    }
+    canvas.drawPath(p2, usedPaint);
+    return true;
+  }
+
+  bool drawConic(Conic co, Canvas canvas, {Paint? paint}) {
+    if (co.type=="Conic0"){
+      drawConic0(co.reveal,canvas);
+    } else if (co.type=="Conic1") {
+      //drawConic1(co.reveal,canvas);
+    } else if (co.type=="Conic2") {
+      drawConic2(co.reveal,canvas);
+    } else if (co.type=="XLine") {
+      //drawXLine(co.reveal,canvas);
+    } else if (co.type=="HLine") {
+      //drawHLine(co.reveal,canvas);
+    }
+    return true;
+  }
+
+  bool drawGMKData( a){
+    return true;
+  }
+
+
+
+
+
+
+  // 处理缩放开始
+  void handleScaleStart(ScaleStartDetails details) {
+    _isDragging = true;
+    _startLocalPosition = details.localFocalPoint;
+    _startMonxivP = Vec(p.x, p.y); // 保存当前平移状态
+    _startMonxivLam = lam.toDouble(); // 保存当前缩放状态
+  }
+
+  // 处理缩放更新（同时处理平移和缩放）
+  void handleScaleUpdate(ScaleUpdateDetails details) {
+    if (details.scale != 1.0) {
+      // 缩放操作
+      double newScale = _startMonxivLam * details.scale;
+      // 限制缩放范围
+      lam = newScale.clamp(monxivLamRestriction[0], monxivLamRestriction[1]);
+    } else if (details.localFocalPoint != _startLocalPosition) {
+      // 平移操作（没有缩放，只有位置变化）
+      Offset delta = details.localFocalPoint - _startLocalPosition;
+      p = Vec(
+        _startMonxivP.x + delta.dx,
+        _startMonxivP.y + delta.dy,
+      );
+    }
+  }
+
+  // 处理缩放结束
+  void handleScaleEnd(ScaleEndDetails details) {
+    _isDragging = false;
+  }
+
+  // 处理滚轮缩放
+  void handlePointerSignal(PointerSignalEvent event) {
+    if (event is PointerScrollEvent) {
+      double zoomFactor = event.scrollDelta.dy > 0 ? 0.9 : 1.1;
+      double newScale = lam * zoomFactor;
+      lam = newScale.clamp(monxivLamRestriction[0], monxivLamRestriction[1]);
+    }
+  }
+
+  // 双击重置视图
+  void handleDoubleTap() {
+    reset();
+    p = Vec(400, 400); // 重置到初始位置
+    lam = 100; // 重置到初始缩放
+  }
 
 
 }
