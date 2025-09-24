@@ -43,7 +43,7 @@ class MyPainter extends CustomPainter {
 
     IntersectionSolver iSolver = IntersectionSolver();
 
-    Circle c = Circle(Vec(), 2.5);//创建圆
+    Circle c = Circle(Vec(), Vec(2.5));//创建圆
     monxiv.drawCircle(c, canvas);//画
 
     Conic0 c0 = Conic0(Vec(5,5),Vec(2),Vec(1,1));
@@ -98,15 +98,15 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   void initState() {
     super.initState();
 
-    // 创建动画控制器，用于持续重绘
+    // 持续重绘
     _animationController = AnimationController(
-      duration: const Duration(days: 365), // 设置很长的持续时间
+      duration: const Duration(days: 114514),
       vsync: this,
-    )..repeat(); // 持续重复动画
+    )..repeat();
 
-    // 监听动画值变化，触发重绘
+    // 监听
     _animationController.addListener(() {
-      setState(() {}); // 每帧都重绘
+      setState(() {}); // 每帧重绘
     });
   }
 

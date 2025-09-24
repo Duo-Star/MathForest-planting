@@ -11,6 +11,6 @@ class DPoint {
       : p1 = (p ?? Vec.zero()) + (v ?? Vec(1, 0)),
         p2 = (p ?? Vec.zero()) - (v ?? Vec(1, 0));
 
-
+  Vec get mid => (p1 + p2) / 2;
 
 }

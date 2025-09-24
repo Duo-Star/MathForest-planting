@@ -25,4 +25,4 @@ export 'Fertile/TPoint.dart';
 export 'Monxiv/main.dart';
 export 'Monxiv/Mambo.dart';
 
-export 'IntersectionSolver.dart';
+export 'Intersection/IntersectionSolver.dart';

@@ -1,13 +1,18 @@
 import 'dart:math' as math;
-import '../Alg/EquSolver.dart';
-import '../Alg/Fertile/DNum.dart';
-import 'Linear/Vec.dart';
-import 'Linear/Line.dart';
-import 'Conic/Circle.dart';
-import 'Conic/Conic0.dart';
-import 'Fertile/DPoint.dart';
+import '../../Alg/EquSolver/EquSolver.dart';
+import '../../Alg/Fertile/DNum.dart';
+import '../Conic/XLine.dart';
+import '../Linear/Plane.dart';
+import '../Linear/Vec.dart';
+import '../Linear/Line.dart';
+import '../Conic/Circle.dart';
+import '../Conic/Conic0.dart';
+import '../Fertile/DPoint.dart';
 
-//library Intersection;
+
+import 'Plane_Line.dart' as _Plane_Line;
+
+
 
 class IntersectionSolver {
 
@@ -66,6 +71,9 @@ class IntersectionSolver {
       return c.indexPoints(thetas);
     }
   }
+
+  static Plane_Line(Plane pl, Line l) => _Plane_Line.Plane_Line(pl, l);
+  static DPoint Plane_XLine(Plane pl, XLine xl) => _Plane_Line.Plane_XLine(pl, xl);
 
   /*
   DPoint Conic0_Line(Conic0 c, Line l) {

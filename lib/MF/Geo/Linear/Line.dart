@@ -7,7 +7,10 @@ class Line {
   final Vec v;
   //line: p + lam * v
   Line([Vec? p, Vec? v]): p = p ?? Vec(), v = v ?? Vec(1);
+  static new2P(Vec p1, Vec p2) => Line(p1, p2-p1);
+
   Vec indexPoint(num lam) => p + v * lam;
+
 
   @override
   String toString() {
