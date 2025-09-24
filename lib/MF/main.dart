@@ -21,6 +21,8 @@ export 'Sta/main.dart';
 
 
 
+import 'package:learnfl/MF/Alg/Complex.dart';
+
 import  'Alg/Funcs.dart' as funcs;
 
 String Version = '1.0.1';
@@ -32,7 +34,7 @@ int N_CODE = 516498410835724;
 num nan = 0/0;
 num inf = 1/0;
 num pi = math.pi;
-
+Complex i = Complex.i;
 
 acos(x) => funcs.acos(x);
 asin(x) => funcs.asin(x);

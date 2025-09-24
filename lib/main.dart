@@ -177,7 +177,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
   void _incrementCounter() {
     setState(() {});
     Mambo mambo = Mambo(context, '曼波');
-    mambo.ha('曼波');
+    var dn = EquSolver.solveComplexQuadratic(i, i, i);
+
+    mambo.ha('曼波${ dn.toString() }');
   }
 
   void _decrementCounter() {

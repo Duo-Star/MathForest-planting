@@ -12,7 +12,12 @@ sin(x) => math.sin(x);
 cos(x) => math.cos(x);
 tan(x) => math.tan(x);
 
-
+sgn(x){
+  if(x>0){ return 1;
+  }else if(x==0){ return 0;
+  }else if(x<0){ return -1;
+  }
+}
 
 sinh( x) {// 双曲正弦函数
   return (math.exp(x) - math.exp(-x)) / 2;
@@ -65,12 +70,3 @@ int fibonacci(int n) {
   return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
-int sgn(num x){
-  if (x<0){
-    return -1;
-  } else if (x>0){
-    return 0;
-  } else {
-    return 1;
-  }
-}

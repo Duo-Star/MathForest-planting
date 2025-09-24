@@ -94,10 +94,12 @@ class Complex {
 
   // 幂运算
   Complex pow(dynamic other) {
-    final n = _toComplex(other);
+    final n = toComplex(other);
     if (isZero && n.isZero) return Complex(1, 0); // 0^0 = 1
     return (ln() * n).exp();
   }
+
+  Complex get sqrt => pow(1/2);
 
   // 自然对数
   Complex ln() {
@@ -193,7 +195,7 @@ class Complex {
   // 工具方法
   List<num> salvage() => [a, b];
 
-  Complex _toComplex(dynamic value) {
+  Complex toComplex(dynamic value) {
     if (value is Complex) return value;
     if (value is num) return Complex(value, 0);
     throw ArgumentError('值必须为数字或复数');
