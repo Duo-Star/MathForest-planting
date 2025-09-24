@@ -1,0 +1,16 @@
+import 'dart:math' as math ;
+import '../Linear/Vec.dart';
+
+class DPoint {
+   Vec p1;
+   Vec p2;
+
+   DPoint([Vec? p1, Vec? p2]): p1 = p1 ?? Vec(-1), p2 = p2 ?? Vec(1);
+
+  DPoint.newPV([Vec? p, Vec? v])
+      : p1 = (p ?? Vec.zero()) + (v ?? Vec(1, 0)),
+        p2 = (p ?? Vec.zero()) - (v ?? Vec(1, 0));
+
+
+
+}
