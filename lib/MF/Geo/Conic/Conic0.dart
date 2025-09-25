@@ -1,11 +1,10 @@
 import 'dart:math';
-import 'package:math_expressions/math_expressions.dart';
 
 
 import '../../Alg/Fertile/DNum.dart';
 import '../Fertile/DPoint.dart';
-import 'HLine.dart';
-import 'XLine.dart';
+//import 'HLine.dart';
+//import 'XLine.dart';
 import 'Conic.dart';
 
 
@@ -127,14 +126,14 @@ class Conic0 {
     return P.dis(indexPoint(theta));
   }
 
-  num der_disP2P(Vec P, num theta){
+  num derDisP2P(Vec P, num theta){
     num dx=2 * (-u.x*sin(theta) + v.x*cos(theta)) * (p.x + u.x*cos(theta) + v.x*sin(theta)-P.x);
     num dy=2 * (-u.y*sin(theta) + v.y*cos(theta)) * (p.y + u.y*cos(theta) + v.y*sin(theta)-P.y);
     return dx + dy ;
   }
 
   //
-  num theta_ClosestP2P(Vec P){
+  num thetaClosestP2P(Vec P){
     num t0 ;
     if (u.len>=v.len) {
       if ((P-p).dot(v)>0 ){ t0=pi/2; }else{ t0=-pi/2; }
@@ -144,18 +143,18 @@ class Conic0 {
     num t=t0;
     num k=-0.05;
     for (var i = 0; i < 12; i++) {
-      t = t + k * der_disP2P(P,t);
+      t = t + k * derDisP2P(P,t);
       k=k/exp(0.0618*i);
     }
     return t;
   }
 
-  Vec p_ClosestP2P(Vec P){
-    return indexPoint(theta_ClosestP2P(P));
+  Vec pClosestP2P(Vec P){
+    return indexPoint(thetaClosestP2P(P));
   }
 
-  num dis_ClosestP2P(Vec P){
-    return P.dis(p_ClosestP2P(P));
+  num disClosestP2P(Vec P){
+    return P.dis(pClosestP2P(P));
   }
 
   String get type => "Conic0";

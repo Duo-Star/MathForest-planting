@@ -39,7 +39,7 @@ class Monxiv {
     return Vec((s.x-p.x) / lam, -(s.x-p.x) / lam);
   }
   void reset(){
-    p = Vec(500,500);
+    p = Vec(0,0);
     lam = 100;
   }
 

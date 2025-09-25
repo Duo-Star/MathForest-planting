@@ -3,7 +3,7 @@ import 'GMKProcess.dart';
 class GMKStructure {
   List<GMKProcess> step = [];
 
-  GMKStructure(List<GMKProcess> step): step = step;
+  GMKStructure(this.step);
 
   int get stepCount => step.length;
 

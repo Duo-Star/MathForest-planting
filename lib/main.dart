@@ -9,6 +9,60 @@ void main() {
   runApp(const MyApp());
 }
 
+
+
+
+class SingleChoice extends StatefulWidget {
+  const SingleChoice({super.key});
+
+  @override
+  State<SingleChoice> createState() => _SingleChoiceState();
+}
+
+enum Calendar { day, week, month, year }
+
+class _SingleChoiceState extends State<SingleChoice> {
+  Calendar calendarView = Calendar.day;
+
+  @override
+  Widget build(BuildContext context) {
+    return SegmentedButton<Calendar>(
+      segments: const <ButtonSegment<Calendar>>[
+        ButtonSegment<Calendar>(
+          value: Calendar.day,
+          label: Text('Day'),
+          icon: Icon(Icons.calendar_view_day),
+        ),
+        ButtonSegment<Calendar>(
+          value: Calendar.week,
+          label: Text('Week'),
+          icon: Icon(Icons.calendar_view_week),
+        ),
+        ButtonSegment<Calendar>(
+          value: Calendar.month,
+          label: Text('Month'),
+          icon: Icon(Icons.calendar_view_month),
+        ),
+        ButtonSegment<Calendar>(
+          value: Calendar.year,
+          label: Text('Year'),
+          icon: Icon(Icons.calendar_today),
+        ),
+      ],
+      selected: <Calendar>{calendarView},
+      onSelectionChanged: (Set<Calendar> newSelection) {
+        setState(() {
+          // By default there is only a single segment that can be
+          // selected at one time, so its value is always the first
+          // item in the selected set.
+          calendarView = newSelection.first;
+        });
+      },
+    );
+  }
+}
+
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
@@ -32,11 +86,7 @@ class MyHomePage extends StatefulWidget {
 
 class MyPainter extends CustomPainter {
   final Monxiv monxiv;
-
   MyPainter({required this.monxiv});
-
-
-
   @override
   void paint(Canvas canvas, Size size) {
     canvas.drawColor(monxiv.bgc, BlendMode.srcOver);
@@ -45,7 +95,6 @@ class MyPainter extends CustomPainter {
     monxiv.drawCircle(c, canvas);//画
 
   }
-
   @override
   bool shouldRepaint(covariant MyPainter oldDelegate) {
     return monxiv != oldDelegate.monxiv;
@@ -77,6 +126,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     _animationController.addListener(() {
       setState(() {}); // 每帧重绘
     });
+
   }
 
   @override
@@ -116,6 +166,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     //获取值
     mambo.ha('${ gmkData.data['C']?.obj.toString() }');
 
+
      //*/
 
     //mambo.ha('${ 1 }');
@@ -125,23 +176,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     //monxiv.drawGMKData(gmkData);
 
 
-
-
-
-
-
-
-
-
   }
 
-  void _decrementCounter() {
-    setState(() {});
-  }
 
-  void _resetCounter() {
-    setState(() {});
-  }
 
   void _showInfoDialog() {
     showDialog(
@@ -163,84 +200,160 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     );
   }
 
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
+    // 使用 Scaffold 提供了基本结构，但没有应用栏
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: _decrementCounter,
-            tooltip: '减少计数器',
-          ),
-          IconButton(
-            icon: const Icon(Icons.remove),
-            onPressed: _decrementCounter,
-            tooltip: '减少计数器',
-          ),
-          IconButton(
-            icon: const Icon(Icons.refresh),
-            onPressed: _resetCounter,
-            tooltip: '重置计数器',
-          ),
-          IconButton(
-            icon: const Icon(Icons.info_outline),
-            onPressed: _showInfoDialog,
-            tooltip: '应用信息',
-          ),
-          PopupMenuButton<String>(
-            onSelected: (String value) {
-              switch (value) {
-                case 'settings':
-                  break;
-                case 'help':
-                  break;
-              }
-            },
-            itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-              const PopupMenuItem<String>(
-                value: 'settings',
-                child: ListTile(
-                  leading: Icon(Icons.settings),
-                  title: Text('设置'),
+      body: Stack( // 使用 Column 垂直布局
+        children: [
+
+
+
+
+          Expanded(
+            child: Listener(
+              onPointerSignal: monxiv.handlePointerSignal,
+              child: GestureDetector(
+                onScaleStart: monxiv.handleScaleStart,
+                onScaleUpdate: monxiv.handleScaleUpdate,
+                onScaleEnd: monxiv.handleScaleEnd,
+                onDoubleTap: monxiv.handleDoubleTap,
+
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return CustomPaint(
+                      painter: MyPainter(monxiv: monxiv),
+                      size: Size(constraints.maxWidth, constraints.maxHeight),
+                    );
+                  },
                 ),
+
               ),
-              const PopupMenuItem<String>(
-                value: 'help',
-                child: ListTile(
-                  leading: Icon(Icons.help),
-                  title: Text('帮助'),
-                ),
-              ),
+            ),
+          ),
+
+
+    Container(
+    height: 160, // 设定为你想要的固定高度
+    color: Colors.blueGrey[100],
+    child: DefaultTabController(
+      initialIndex: 3,
+      length: 8,
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('TabBar Sample'),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.add_alert),
+              tooltip: 'Show Snackbar',
+              onPressed: () {
+                ScaffoldMessenger.of(
+                  context,
+                ).showSnackBar(const SnackBar(content: Text('This is a snackbar')));
+              },
+            ),
+            IconButton(
+              icon: const Icon(Icons.file_copy_outlined),
+              tooltip: 'Show Snackbar',
+              onPressed: () {  },
+            ),
+            IconButton(
+              icon: const Icon(Icons.navigate_next),
+              tooltip: 'Go to the next page',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute<void>(
+                    builder: (BuildContext context) {
+                      return Scaffold(
+                        appBar: AppBar(title: const Text('Next page')),
+                        body: const Center(
+                          child: Text('This is the next page', style: TextStyle(fontSize: 24)),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ],
+          bottom: TabBar(
+            tabs: const <Widget>[
+              Tab(text : '文件'),
+              Tab(text : '工具'),
+              Tab(text : '属性'),
+              Tab(text : '线性'),
+              Tab(text : '经典'),
+              Tab(text : '退化'),
+              Tab(text : '共生'),
+              Tab(text : '元素'),
             ],
           ),
-        ],
-      ),
-      body: Listener(
-        onPointerSignal: monxiv.handlePointerSignal,
-        child: GestureDetector(
-          onScaleStart: monxiv.handleScaleStart,
-          onScaleUpdate: monxiv.handleScaleUpdate,
-          onScaleEnd: monxiv.handleScaleEnd,
-          onDoubleTap: monxiv.handleDoubleTap,
-
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return CustomPaint(
-                painter: MyPainter(monxiv: monxiv),
-                size: Size(constraints.maxWidth, constraints.maxHeight),
-              );
-            },
-          ),
+        ),
+        body: const TabBarView(
+          children: <Widget>[
+            Center(child: Text("It's cloudy here")),
+            Center(child: Text("It's rainy here")),
+            Center(child: Text("It's sunny here")),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                SizedBox(width: 15),
+                Chip(
+                  avatar: Icon(Icons.music_note),
+                  padding: EdgeInsets.all(8),
+                  label: Text('点'),
+                ),
+                SizedBox(width: 15),
+                Chip(
+                  avatar: Icon(Icons.music_note),
+                  padding: EdgeInsets.all(8),
+                  label: Text('直线'),
+                ),
+                SizedBox(width: 15),
+                Chip(
+                  avatar: Icon(Icons.music_note),
+                  padding: EdgeInsets.all(8),
+                  label: Text('线段'),
+                ),
+                SizedBox(width: 15),
+                Chip(
+                  avatar: Icon(Icons.music_note),
+                  padding: EdgeInsets.all(8),
+                  label: Text('三角形'),
+                ),
+              ]
+            ),
+            Center(child: Text("It's rainy here")),
+            Center(child: Text("It's sunny here")),
+            Center(child: Text("It's cloudy here")),
+            Center(child: Text("It's rainy here")),
+          ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+    ),
+
+    ),
+
+
+
+
+
+
+
+
+
+
+        ],
       ),
     );
   }
+
+
+
 }

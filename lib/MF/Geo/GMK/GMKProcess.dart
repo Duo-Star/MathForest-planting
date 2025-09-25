@@ -6,10 +6,7 @@ class GMKProcess {
   GMKLabel label = GMKLabel("");
   List<dynamic> factor = [];
 
-  GMKProcess(String method, GMKLabel label, List<dynamic> factor):
-      method = method,
-      label = label,
-      factor = factor;
+  GMKProcess(this.method, this.label, this.factor);
 
 
 
