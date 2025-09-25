@@ -15,6 +15,11 @@ class Vec {
         y = math.sin(a.theta)*math.cos(a.phi)*l,
         z = math.sin(a.phi)*l;
 
+  Vec.fromList(List ls):
+      x = ls[0],
+      y = ls[1],
+      z = ls[2];
+
   Vec.zero() : this(0.0, 0.0, 0.0);
 
   Vec.i() : this(1.0, 0.0, 0.0);

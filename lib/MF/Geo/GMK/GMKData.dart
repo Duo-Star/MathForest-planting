@@ -1,8 +1,8 @@
 import '../Monxiv/GraphOBJ.dart';
 
 class GMKData {
-  List<GraphOBJ> data =[];
+  Map<String,GraphOBJ> data = Map<String,GraphOBJ>();
 
-  GMKData(List<GraphOBJ> data): data = data;
+  GMKData(Map<String,GraphOBJ> data): data = data;
 
 }

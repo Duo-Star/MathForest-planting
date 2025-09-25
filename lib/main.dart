@@ -94,22 +94,35 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     Mambo mambo = Mambo(context, '曼波');
     var dn = EquSolver.solveComplexQuadratic(i, i, i);
 
-    mambo.ha('曼波${ dn.toString() }');
+    //mambo.ha('曼波${ dn.toString() }');
 
-    var gmkData = GMKData([]);
+    //*
+    //创建GMK核心
     var gmkCore = GMKCore();
+
+    //手动构建几何结构
     var ags = GMKStructure([
-      GMKProcess("P", GMKLabel("A"), [-1, 0, 0]),
-      GMKProcess("P", GMKLabel("B"), [1, 0, 0]),
+      GMKProcess("P", GMKLabel("A"), [-1, 2, 0]),
+      GMKProcess("P", GMKLabel("B"), [1, 3, 0]),
       GMKProcess("midP", GMKLabel("C"), [GMKLabel("A"), GMKLabel("B")])
     ]);
+
+    //加载结构
     gmkCore.loadStructure(ags);
 
-    gmkData = gmkCore.run;
+    //运行
+    var gmkData = gmkCore.run;
 
-    Monxiv monxiv = Monxiv();
+    //获取值
+    mambo.ha('${ gmkData.data['C']?.obj.toString() }');
 
-    monxiv.drawGMKData(gmkData);
+     //*/
+
+    //mambo.ha('${ 1 }');
+
+    //Monxiv monxiv = Monxiv();
+
+    //monxiv.drawGMKData(gmkData);
 
 
 

@@ -8,4 +8,7 @@ class GraphOBJ {
   num size = 1;
   String name = "Mambo";
 
+  GraphOBJ(obj):
+      obj = obj;
+
 }

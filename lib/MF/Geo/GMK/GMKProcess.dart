@@ -3,13 +3,15 @@ import 'GMKLabel.dart';
 class GMKProcess {
   //..[name] = tool.method(factor)
   String method = "";
-  GMKLabel name = GMKLabel("");
+  GMKLabel label = GMKLabel("");
   List<dynamic> factor = [];
 
-  GMKProcess(String method,GMKLabel name,List<dynamic> factor):
+  GMKProcess(String method, GMKLabel label, List<dynamic> factor):
       method = method,
-      name = name,
+      label = label,
       factor = factor;
+
+
 
 }
 /*
