@@ -24,6 +24,9 @@ void IF(){
   } else {
     print('等级：F（不及格）');
   }
+
+
+
 }
 
 void TernaryOperator() {

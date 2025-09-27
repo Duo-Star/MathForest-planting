@@ -4,14 +4,17 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart' as painting;
 
-import '../Linear/Vec.dart';
-import '../Linear/Line.dart';
-import '../Conic/Conic.dart';
-import '../Conic/Circle.dart';
-import '../Conic/Conic0.dart';
-import '../Conic/Conic1.dart';
-import '../Conic/Conic2.dart';
-import '../Fertile/DPoint.dart';
+import 'MColor.dart' as MColor;
+
+
+import '../../Linear/Vec.dart';
+import '../../Linear/Line.dart';
+import '../../Conic/Conic.dart';
+import '../../Conic/Circle.dart';
+import '../../Conic/Conic0.dart';
+import '../../Conic/Conic1.dart';
+import '../../Conic/Conic2.dart';
+import '../../Fertile/DPoint.dart';
 
 
 class Monxiv {
@@ -52,7 +55,7 @@ class Monxiv {
     return Vec(c.x * lam + p.x,-c.y * lam + p.y);
   }
   Vec s2c(Vec s){
-    return Vec((s.x-p.x) / lam, -(s.x-p.x) / lam);
+    return Vec((s.x-p.x) / lam, -(s.y-p.y) / lam);
   }
   void reset(){
     p = Vec(150,150);
@@ -72,7 +75,6 @@ class Monxiv {
 
 
     builder.addText(str);
-    builder.pop();
 
     final Paragraph paragraph = builder.build();
     paragraph.layout(ParagraphConstraints(width: width));
@@ -197,7 +199,9 @@ class Monxiv {
         case const (DPoint) :
           drawDPoint(gmkData.data[key].obj, canvas);
         case const (Vec) :
-          drawPoint(gmkData.data[key].obj, canvas);
+          //var _ = MColor.initializePaints();
+          drawPoint(gmkData.data[key].obj, canvas, paint: MColor.paints['green']);
+
         case const (Circle) :
           drawCircle(gmkData.data[key].obj, canvas);
         case const (Line) :
@@ -259,6 +263,7 @@ class Monxiv {
 
   // 处理缩放开始
   void handleScaleStart(ScaleStartDetails details) {
+    print('开始移动');
     _isDragging = true;
     _startLocalPosition = details.localFocalPoint;
     _startMonxivP = Vec(p.x, p.y); // 保存当前平移状态
@@ -267,6 +272,7 @@ class Monxiv {
 
   // 处理缩放更新（同时处理平移和缩放）
   void handleScaleUpdate(ScaleUpdateDetails details) {
+    //print('handleScaleUpdate');
     if (details.scale != 1.0) {
       // 缩放操作
       double newScale = _startMonxivLam * details.scale;
@@ -289,6 +295,7 @@ class Monxiv {
 
   // 处理滚轮缩放
   void handlePointerSignal(PointerSignalEvent event) {
+    print('滚轮缩放');
     if (event is PointerScrollEvent) {
       double zoomFactor = event.scrollDelta.dy > 0 ? 0.9 : 1.1;
       double newScale = lam * zoomFactor;
@@ -301,6 +308,21 @@ class Monxiv {
     reset();
     p = Vec(400, 400); // 重置到初始位置
     lam = 100; // 重置到初始缩放
+  }
+
+  void onTap() {
+
+
+  }
+
+  void onTapDown(TapDownDetails details) {
+    // 获取点击坐标
+    Offset globalPosition = details.globalPosition; // 全局坐标
+    Vec tapSP = Vec(globalPosition.dx, globalPosition.dy);
+    Vec tapCP = s2c(tapSP);
+
+    print(tapCP.toString());
+
   }
 
 

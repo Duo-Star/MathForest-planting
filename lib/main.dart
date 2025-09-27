@@ -96,17 +96,36 @@ class MyPainter extends CustomPainter {
     var ags = GMKStructure([
       GMKProcess("P", "A", [-1, 2, 0]),
       GMKProcess("P", "B", [1, 3, 0]),
-      GMKProcess("midP", "C", ["A", "B"]),
+      GMKProcess("MidP", "C", ["A", "B"]),
       GMKProcess("Cir", "cir", ["A", "B"]),
 
     ]);
 
     //加载结构
-    gmkCore.loadStructure(ags);
+    //gmkCore.loadStructure(ags);
+
+    gmkCore.loadSourceStructure('''
+``我是注释``
+``我可以
+换行``
+
+@A is P of 1,1;
+@B is P of 3,2;
+@cir is Cir of <A>,<B>;
+@M is MidP of <A>,<B>;
+
+``样式可选声明``
+#A color:blue, size:1, style:outline;
+
+
+''');
+
+    //print(gmkCore.outputSource);
 
     //运行
     var gmkData = gmkCore.run;
 
+    //画
     monxiv.drawGMKData(gmkData, canvas);
 
   }
@@ -153,9 +172,6 @@ class _MyHomePageState extends State<MyHomePage>
     Mambo mambo = Mambo(context, '曼波');
     var dn = EquSolver.solveComplexQuadratic(i, i, i);
 
-    //mambo.ha('曼波${ dn.toString() }');
-
-    //*
     //创建GMK核心
     var gmkCore = GMKCore();
 
@@ -163,8 +179,9 @@ class _MyHomePageState extends State<MyHomePage>
     var ags = GMKStructure([
       GMKProcess("P", "A", [-1, 2, 0]),
       GMKProcess("P", "B", [1, 3, 0]),
-      GMKProcess("midP", "C", ["A", "B"]),
-      //GMKProcess("Cir", "cir", ["A", "B"]),
+      GMKProcess("MidP", "C", ["A", "B"]),
+      GMKProcess("Cir", "cir", ["A", "B"]),
+
     ]);
 
     //加载结构
@@ -173,21 +190,12 @@ class _MyHomePageState extends State<MyHomePage>
     //运行
     var gmkData = gmkCore.run;
 
-    //获取值
-    //mambo.ha('${ gmkData.data['C']?.obj.toString() }');
+    //画
+    //monxiv.drawGMKData(gmkData, canvas);
 
-    mambo.ha('${gmkData.data["C"]?.obj.runtimeType}');
+    mambo.ha(gmkCore.outputSource);
 
-    //*/
 
-    //mambo.ha('${ 1 }');
-
-    //Monxiv monxiv = Monxiv();
-
-    //monxiv.drawGMKData(gmkData,canvas);
-
-    var c = Circle();
-    //mambo.ha('${c.runtimeType == Line}');
   }
 
   void _showInfoDialog() {
@@ -229,6 +237,8 @@ class _MyHomePageState extends State<MyHomePage>
               onScaleUpdate: monxiv.handleScaleUpdate,
               onScaleEnd: monxiv.handleScaleEnd,
               onDoubleTap: monxiv.handleDoubleTap,
+              onTap: monxiv.onTap,
+              onTapDown: monxiv.onTapDown,
 
               child: LayoutBuilder(
                 builder: (context, constraints) {

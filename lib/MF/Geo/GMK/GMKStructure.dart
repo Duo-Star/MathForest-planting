@@ -11,4 +11,9 @@ class GMKStructure {
     return step[n-1];
   }
 
+  bool addStep(GMKProcess gmkProcess){
+    step.add(gmkProcess);
+    return true;
+  }
+
 }

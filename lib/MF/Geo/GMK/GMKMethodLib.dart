@@ -10,7 +10,7 @@ dynamic run(GMKProcess gmkProcess, GMKData gmkData) {
   switch (gmkProcess.method) {
     case 'P':
       return Vec.fromList(gmkProcess.factor);
-    case 'midP':
+    case 'MidP':
       Vec p1 = gmkData.data[gmkProcess.factor[0]]?.obj;
       Vec p2 = gmkData.data[gmkProcess.factor[1]]?.obj;
       return p1.mid(p2);

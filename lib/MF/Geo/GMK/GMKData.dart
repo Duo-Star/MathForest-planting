@@ -1,4 +1,4 @@
-import '../Monxiv/GraphOBJ.dart';
+import 'Monxiv/GraphOBJ.dart';
 
 class GMKData {
   Map<String,GraphOBJ> data = <String,GraphOBJ>{};

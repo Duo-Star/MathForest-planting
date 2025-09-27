@@ -25,9 +25,9 @@ export 'Fertile/QPoint.dart';
 export 'Fertile/TPoint.dart';
 
 //几何-绘图
-export 'Monxiv/main.dart';
-export 'Monxiv/Mambo.dart';
-export 'Monxiv/GraphOBJ.dart';
+export 'GMK/Monxiv/main.dart';
+export 'GMK/Monxiv/Mambo.dart';
+export 'GMK/Monxiv/GraphOBJ.dart';
 
 export 'Intersection/IntersectionSolver.dart';
 
