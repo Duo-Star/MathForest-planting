@@ -7,11 +7,6 @@ import 'GMKMethodLib.dart' as GMKMethodLib;
 
 import '../Monxiv/GraphOBJ.dart';
 
-
-/*
-
- */
-
 class GMKCore {
   GMKStructure structure = GMKStructure([]);
   GMKData gmkData = GMKData({});
@@ -27,13 +22,11 @@ class GMKCore {
     int structureStepCount =structure.stepCount;
     for (var i = 1; i <= structureStepCount; i++) {
       GMKProcess itemGMKProcess = structure.indexStep(i);
-      gmkData.data[itemGMKProcess.label.name] =
+      gmkData.data[itemGMKProcess.label] =
           GraphOBJ( GMKMethodLib.run(itemGMKProcess, gmkData));
     }
     return gmkData;
   }
-
-
 
 
 }

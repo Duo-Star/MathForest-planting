@@ -13,6 +13,11 @@ class Circle {
         v = v ?? Vec(1),
         n=n ?? Vec(0,0,1);
 
+  Circle.new2P2d(Vec p1, Vec p2):
+        p = p1,
+        v = p2 - p1,
+        n = Vec(0,0,1);
+
   get r => v.len;
   get area => pi * r * r ;
   get cir => 2 * pi * r ;

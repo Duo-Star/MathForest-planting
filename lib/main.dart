@@ -9,9 +9,6 @@ void main() {
   runApp(const MyApp());
 }
 
-
-
-
 class SingleChoice extends StatefulWidget {
   const SingleChoice({super.key});
 
@@ -62,7 +59,6 @@ class _SingleChoiceState extends State<SingleChoice> {
   }
 }
 
-
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
@@ -89,28 +85,46 @@ class MyPainter extends CustomPainter {
   MyPainter({required this.monxiv});
   @override
   void paint(Canvas canvas, Size size) {
-    canvas.drawColor(monxiv.bgc, BlendMode.srcOver);
-    IntersectionSolver iSolver = IntersectionSolver();
-    Circle c = Circle(Vec(), Vec(2.5));//创建圆
-    monxiv.drawCircle(c, canvas);//画
+
+    monxiv.setSize(size);
+    monxiv.drawFramework(canvas);
+
+    //创建GMK核心
+    var gmkCore = GMKCore();
+
+    //手动构建几何结构
+    var ags = GMKStructure([
+      GMKProcess("P", "A", [-1, 2, 0]),
+      GMKProcess("P", "B", [1, 3, 0]),
+      GMKProcess("midP", "C", ["A", "B"]),
+      GMKProcess("Cir", "cir", ["A", "B"]),
+
+    ]);
+
+    //加载结构
+    gmkCore.loadStructure(ags);
+
+    //运行
+    var gmkData = gmkCore.run;
+
+    monxiv.drawGMKData(gmkData, canvas);
 
   }
+
   @override
   bool shouldRepaint(covariant MyPainter oldDelegate) {
     return monxiv != oldDelegate.monxiv;
   }
 }
 
-
-
-class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateMixin {
+class _MyHomePageState extends State<MyHomePage>
+    with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
 
   // 使用Monxiv管理视图变换
   Monxiv monxiv = Monxiv()
     ..reset()
-    ..infoMode = true;
-
+    ..infoMode = false;
 
   @override
   void initState() {
@@ -126,7 +140,6 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     _animationController.addListener(() {
       setState(() {}); // 每帧重绘
     });
-
   }
 
   @override
@@ -135,11 +148,7 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     super.dispose();
   }
 
-
-
-
-
-  void _incrementCounter() {
+  void hihi() {
     setState(() {});
     Mambo mambo = Mambo(context, '曼波');
     var dn = EquSolver.solveComplexQuadratic(i, i, i);
@@ -152,9 +161,10 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
 
     //手动构建几何结构
     var ags = GMKStructure([
-      GMKProcess("P", GMKLabel("A"), [-1, 2, 0]),
-      GMKProcess("P", GMKLabel("B"), [1, 3, 0]),
-      GMKProcess("midP", GMKLabel("C"), [GMKLabel("A"), GMKLabel("B")])
+      GMKProcess("P", "A", [-1, 2, 0]),
+      GMKProcess("P", "B", [1, 3, 0]),
+      GMKProcess("midP", "C", ["A", "B"]),
+      //GMKProcess("Cir", "cir", ["A", "B"]),
     ]);
 
     //加载结构
@@ -164,21 +174,21 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     var gmkData = gmkCore.run;
 
     //获取值
-    mambo.ha('${ gmkData.data['C']?.obj.toString() }');
+    //mambo.ha('${ gmkData.data['C']?.obj.toString() }');
 
+    mambo.ha('${gmkData.data["C"]?.obj.runtimeType}');
 
-     //*/
+    //*/
 
     //mambo.ha('${ 1 }');
 
     //Monxiv monxiv = Monxiv();
 
-    //monxiv.drawGMKData(gmkData);
+    //monxiv.drawGMKData(gmkData,canvas);
 
-
+    var c = Circle();
+    //mambo.ha('${c.runtimeType == Line}');
   }
-
-
 
   void _showInfoDialog() {
     showDialog(
@@ -186,7 +196,9 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('应用信息'),
-          content: const Text('测试中的MathForest-GeoMKY\n\n使用说明：\n- 拖拽：平移视图\n- 滚轮：缩放视图\n- 双击：重置视图'),
+          content: const Text(
+            '测试中的MathForest-GeoMKY\n\n使用说明：\n- 拖拽：平移视图\n- 滚轮：缩放视图\n- 双击：重置视图',
+          ),
           actions: [
             TextButton(
               onPressed: () {
@@ -200,160 +212,136 @@ class _MyHomePageState extends State<MyHomePage> with SingleTickerProviderStateM
     );
   }
 
-
-
-
-
+  int _selectedIndex = 0;
+  final List<String> chipLabels = ['Point', 'Line', 'Triangle', 'more'];
 
   @override
   Widget build(BuildContext context) {
     // 使用 Scaffold 提供了基本结构，但没有应用栏
     return Scaffold(
-      body: Stack( // 使用 Column 垂直布局
+      body: Stack(
+        // 使用 Column 垂直布局
         children: [
+          Listener(
+            onPointerSignal: monxiv.handlePointerSignal,
+            child: GestureDetector(
+              onScaleStart: monxiv.handleScaleStart,
+              onScaleUpdate: monxiv.handleScaleUpdate,
+              onScaleEnd: monxiv.handleScaleEnd,
+              onDoubleTap: monxiv.handleDoubleTap,
 
-
-
-
-          Expanded(
-            child: Listener(
-              onPointerSignal: monxiv.handlePointerSignal,
-              child: GestureDetector(
-                onScaleStart: monxiv.handleScaleStart,
-                onScaleUpdate: monxiv.handleScaleUpdate,
-                onScaleEnd: monxiv.handleScaleEnd,
-                onDoubleTap: monxiv.handleDoubleTap,
-
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return CustomPaint(
-                      painter: MyPainter(monxiv: monxiv),
-                      size: Size(constraints.maxWidth, constraints.maxHeight),
-                    );
-                  },
-                ),
-
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return CustomPaint(
+                    painter: MyPainter(monxiv: monxiv),
+                    size: Size(constraints.maxWidth, constraints.maxHeight),
+                  );
+                },
               ),
             ),
           ),
 
-
-    Container(
-    height: 160, // 设定为你想要的固定高度
-    color: Colors.blueGrey[100],
-    child: DefaultTabController(
-      initialIndex: 3,
-      length: 8,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('TabBar Sample'),
-          actions: <Widget>[
-            IconButton(
-              icon: const Icon(Icons.add_alert),
-              tooltip: 'Show Snackbar',
-              onPressed: () {
-                ScaffoldMessenger.of(
-                  context,
-                ).showSnackBar(const SnackBar(content: Text('This is a snackbar')));
-              },
-            ),
-            IconButton(
-              icon: const Icon(Icons.file_copy_outlined),
-              tooltip: 'Show Snackbar',
-              onPressed: () {  },
-            ),
-            IconButton(
-              icon: const Icon(Icons.navigate_next),
-              tooltip: 'Go to the next page',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute<void>(
-                    builder: (BuildContext context) {
-                      return Scaffold(
-                        appBar: AppBar(title: const Text('Next page')),
-                        body: const Center(
-                          child: Text('This is the next page', style: TextStyle(fontSize: 24)),
-                        ),
-                      );
-                    },
+          Container(
+            height: 160, // 设定为你想要的固定高度
+            color: Colors.blueGrey[100],
+            child: DefaultTabController(
+              initialIndex: 3,
+              length: 8,
+              child: Scaffold(
+                appBar: AppBar(
+                  title: const Text('TabBar Sample'),
+                  actions: <Widget>[
+                    IconButton(
+                      icon: const Icon(Icons.add_alert),
+                      tooltip: 'Show Snackbar',
+                      onPressed: () {
+                        hihi();
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.file_copy_outlined),
+                      tooltip: 'Show Snackbar',
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('This is a snackbar')),
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.navigate_next),
+                      tooltip: 'Go to the next page',
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute<void>(
+                            builder: (BuildContext context) {
+                              return Scaffold(
+                                appBar: AppBar(title: const Text('Next page')),
+                                body: const Center(
+                                  child: Text(
+                                    'This is the next page',
+                                    style: TextStyle(fontSize: 24),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                  bottom: TabBar(
+                    tabs: const <Widget>[
+                      Tab(text: '文件'),
+                      Tab(text: '工具'),
+                      Tab(text: '属性'),
+                      Tab(text: '线性'),
+                      Tab(text: '经典'),
+                      Tab(text: '退化'),
+                      Tab(text: '共生'),
+                      Tab(text: '元素'),
+                    ],
                   ),
-                );
-              },
+                ),
+                body: TabBarView(
+                  children: <Widget>[
+                    const Center(child: Text("It's cloudy here")),
+                    const Center(child: Text("It's rainy here")),
+                    const Center(child: Text("It's sunny here")),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        const SizedBox(width: 15),
+                        ...List.generate(chipLabels.length, (index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 15),
+                            child: ChoiceChip(
+                              //avatar: const Icon(Icons.music_note),
+                              padding: const EdgeInsets.all(8),
+                              label: Text(chipLabels[index]),
+                              selected: _selectedIndex == index,
+                              onSelected: (bool selected) {
+                                setState(() {
+                                  _selectedIndex = index;
+                                });
+                              },
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
+                    const Center(child: Text("It's rainy here")),
+                    const Center(child: Text("It's sunny here")),
+                    const Center(child: Text("It's cloudy here")),
+                    const Center(child: Text("It's rainy here")),
+                  ],
+                ),
+              ),
             ),
-          ],
-          bottom: TabBar(
-            tabs: const <Widget>[
-              Tab(text : '文件'),
-              Tab(text : '工具'),
-              Tab(text : '属性'),
-              Tab(text : '线性'),
-              Tab(text : '经典'),
-              Tab(text : '退化'),
-              Tab(text : '共生'),
-              Tab(text : '元素'),
-            ],
           ),
-        ),
-        body: const TabBarView(
-          children: <Widget>[
-            Center(child: Text("It's cloudy here")),
-            Center(child: Text("It's rainy here")),
-            Center(child: Text("It's sunny here")),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(width: 15),
-                Chip(
-                  avatar: Icon(Icons.music_note),
-                  padding: EdgeInsets.all(8),
-                  label: Text('点'),
-                ),
-                SizedBox(width: 15),
-                Chip(
-                  avatar: Icon(Icons.music_note),
-                  padding: EdgeInsets.all(8),
-                  label: Text('直线'),
-                ),
-                SizedBox(width: 15),
-                Chip(
-                  avatar: Icon(Icons.music_note),
-                  padding: EdgeInsets.all(8),
-                  label: Text('线段'),
-                ),
-                SizedBox(width: 15),
-                Chip(
-                  avatar: Icon(Icons.music_note),
-                  padding: EdgeInsets.all(8),
-                  label: Text('三角形'),
-                ),
-              ]
-            ),
-            Center(child: Text("It's rainy here")),
-            Center(child: Text("It's sunny here")),
-            Center(child: Text("It's cloudy here")),
-            Center(child: Text("It's rainy here")),
-          ],
-        ),
-      ),
-    ),
-
-    ),
-
-
-
-
-
-
-
-
-
-
         ],
       ),
     );
   }
-
-
-
 }

@@ -32,9 +32,7 @@ export 'Monxiv/GraphOBJ.dart';
 export 'Intersection/IntersectionSolver.dart';
 
 
-export 'GMK/GMKCompiled.dart';
 export 'GMK/GMKCore.dart';
-export 'GMK/GMKLabel.dart';
 export 'GMK/GMKMethodLib.dart';
 export 'GMK/GMKProcess.dart';
 export 'GMK/GMKStructure.dart';
