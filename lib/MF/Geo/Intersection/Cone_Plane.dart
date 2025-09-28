@@ -1,12 +1,12 @@
 library Cone_Plane;
 //Intersection
 import 'dart:math';
-import 'package:learnfl/MF/Alg/Fertile/DNum.dart';
-import 'package:learnfl/MF/Geo/Conic/Circle.dart';
-import 'package:learnfl/MF/Geo/Conic/XLine.dart';
-import 'package:learnfl/MF/Geo/Fertile/DPoint.dart';
+import '../../Alg/Fertile/DNum.dart';
+import '../Conic/Circle.dart';
+import '../Conic/XLine.dart';
+import '../Fertile/DPoint.dart';
 
-import '../../Alg/EquSolver/EquSolver.dart';
+import '../../Alg/EquSolver/EquSolver.dart' as EquSolver;
 import '../Conic/Conic0.dart';
 import '../Conic/Conic1.dart';
 import '../Conic/Conic2.dart';

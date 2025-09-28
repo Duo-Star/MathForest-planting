@@ -14,4 +14,3 @@ Vec Plane_Line(Plane pl, Line l){
 DPoint Plane_XLine(Plane pl, XLine xl){
   return DPoint(Plane_Line(pl, xl.l1), Plane_Line(pl, xl.l2));
 }
-

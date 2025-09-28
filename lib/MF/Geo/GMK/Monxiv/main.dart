@@ -1,3 +1,4 @@
+import 'dart:ffi' as ffi;
 import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/gestures.dart';
@@ -207,7 +208,12 @@ class Monxiv {
         case const (Line) :
           drawLine(gmkData.data[key].obj, canvas);
         case const (Conic0) :
-          drawConic(gmkData.data[key].obj, canvas);
+          drawConic0(gmkData.data[key].obj, canvas);
+        case const (ffi.Double) :
+          drawText(gmkData.data[key].obj.toString(), Vec(gmkData.data[key].obj,0), 12, 500, canvas);
+        case const (String) :
+          drawText(gmkData.data[key].obj.toString(), Vec(0,0), 12, 500, canvas);
+
           default:
             drawText('drawGMKData - error', Vec(0,0), 12, 500, canvas);
       }

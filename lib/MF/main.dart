@@ -21,9 +21,11 @@ export 'Sta/main.dart';
 
 
 
-import 'package:learnfl/MF/Alg/Complex.dart';
+import 'Alg/Complex.dart';
 
 import  'Alg/Funcs.dart' as funcs;
+import 'Alg/EquSolver/EquSolver.dart' as EquSolver0;
+
 
 String Version = '1.0.1';
 String Author = 'Duo';

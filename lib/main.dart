@@ -109,10 +109,17 @@ class MyPainter extends CustomPainter {
 ``我可以
 换行``
 
-@A is P of 1,1;
-@B is P of 3,2;
-@cir is Cir of <A>,<B>;
-@M is MidP of <A>,<B>;
+@x is Num of 1; //相当于ggb滑动条
+@A is P of <x>, 1; //<x> 数字插入
+@B is P of 3.1, 1; //对空格不再敏感
+@cir is Cir of <.o>, <B>; //.o 为预设值，表示原点
+/@M is MidP of <A>, <B>;
+@l is L of <A>,<B>;
+
+/@P1 is Ins of <l>,<cir>,1;
+@c0_1 is C0 of <.o>,<A>,<B>;
+/@F12 is F of <c0_1>;
+/@xl_1 is XL of <A>,<F12>;
 
 ``样式可选声明``
 #A color:blue, size:1, style:outline;
@@ -124,6 +131,8 @@ class MyPainter extends CustomPainter {
 
     //运行
     var gmkData = gmkCore.run;
+
+    //print(gmkCore.gmkData.data['x']?.obj.toString());
 
     //画
     monxiv.drawGMKData(gmkData, canvas);
@@ -170,7 +179,8 @@ class _MyHomePageState extends State<MyHomePage>
   void hihi() {
     setState(() {});
     Mambo mambo = Mambo(context, '曼波');
-    var dn = EquSolver.solveComplexQuadratic(i, i, i);
+
+    //var dn = EquSolver.solveComplexQuadratic(i, i, i);
 
     //创建GMK核心
     var gmkCore = GMKCore();

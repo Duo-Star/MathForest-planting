@@ -68,8 +68,9 @@ class GMKCore {
     for (var line in lines) {
       //GMKProcess(this.method, this.label, this.factor);
       if (line.startsWith('@')) {
-        String label = substringBetween(line, '@', ' is ');
-        String method = substringBetween(line, ' is ', ' of ');
+        //剔除首尾空格 - trim()
+        String label = substringBetween(line, '@', ' is ').trim();
+        String method = substringBetween(line, ' is ', ' of ').trim();
         List<dynamic> factor = str2Factor(substringBetween(line, ' of ', ';'));
         structure.addStep(GMKProcess(method, label, factor));
 

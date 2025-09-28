@@ -78,7 +78,7 @@ class GMKProcess {
       if (part.startsWith('<') && part.endsWith('>')) {
         // 字符串类型，去掉尖括号
         String content = part.substring(1, part.length - 1);
-        factors.add(content);
+        factors.add(content.trim());
       } else {
         // 尝试解析为布尔值、数字或保持原字符串
         dynamic value = _parseValue(part);
@@ -106,9 +106,6 @@ class GMKProcess {
     // 无法解析，返回原始字符串
     return value;
   }
-
-
-
 
 }
 
