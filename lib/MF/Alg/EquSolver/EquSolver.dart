@@ -13,13 +13,8 @@ import 'Polynomial.dart' as Polynomial;
 import 'Trigonometric.dart' as Trigonometric;
 
 (num, num) solve2x2LinearSystem(
-  num a1,
-  num b1,
-  num c1,
-  num a2,
-  num b2,
-  num c2,
-) => Linear.solve2x2LinearSystem(a1, b1, c1, a2, b2, c2);
+  num a1, num b1, num c1,
+  num a2, num b2, num c2,) => Linear.solve2x2LinearSystem(a1, b1, c1, a2, b2, c2);
 
 
 DNum solveQuadratic(num a, num b, num c) => Polynomial.solveQuadratic(a, b, c);

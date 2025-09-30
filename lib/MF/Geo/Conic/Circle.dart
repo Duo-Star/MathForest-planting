@@ -8,10 +8,13 @@ class Circle {
   final Vec v;
   final Vec n;
 
+  String get type => "Circle";
+
   Circle([Vec? p, Vec? v, Vec? n]): //位置，径向，法向
         p = p ?? Vec(),
         v = v ?? Vec(1),
         n=n ?? Vec(0,0,1);
+
 
   Circle.new2P2d(Vec p1, Vec p2):
         p = p1,
@@ -24,7 +27,8 @@ class Circle {
   get u => v.cross(n);
 
 
-  Vec indexPoint(num theta) => p + u * cos(theta) + v * sin(theta);
+  //Vec indexPoint(num theta) => p + u * cos(theta) + v * sin(theta);
+  Vec indexPoint(num theta) => p + Vec(r) * cos(theta) + Vec(0,r) * sin(theta);
   DPoint indexPoints(DNum theta) => DPoint(indexPoint(theta.n1), indexPoint(theta.n2));
 
 @override

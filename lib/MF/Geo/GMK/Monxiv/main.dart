@@ -1,10 +1,11 @@
-import 'dart:ffi' as ffi;
+//import 'dart:ffi' as ffi;
 import 'dart:math';
 import 'dart:ui';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart' as painting;
 
+import '../../Conic/Cir2.dart';
 import 'MColor.dart' as MColor;
 
 
@@ -100,7 +101,7 @@ class Monxiv {
   }
 
 
-  bool drawCircle(Circle circle, Canvas canvas, {Paint? paint}) {
+  bool drawCir2(Cir2 circle, Canvas canvas, {Paint? paint}) {
     final Paint usedPaint = paint ?? defaultPaint;
     canvas.drawCircle(
         c2s(circle.p).offset,
@@ -194,28 +195,28 @@ class Monxiv {
   }
 
   bool drawGMKData(gmkData, canvas){
-    drawText('drawGMKData - error', c2s(Vec(10,10)), 12, 500, canvas);
+    //drawText('drawGMKData - error', c2s(Vec(10,10)), 12, 500, canvas);
     for (var key in gmkData.data.keys) {
       switch (gmkData.data[key]?.obj.runtimeType) {
-        case const (DPoint) :
+        case const (DPoint) : //骈点
           drawDPoint(gmkData.data[key].obj, canvas);
         case const (Vec) :
           //var _ = MColor.initializePaints();
           drawPoint(gmkData.data[key].obj, canvas, paint: MColor.paints['green']);
 
-        case const (Circle) :
-          drawCircle(gmkData.data[key].obj, canvas);
+        case const (Cir2) :
+          drawCir2(gmkData.data[key].obj, canvas);
         case const (Line) :
           drawLine(gmkData.data[key].obj, canvas);
         case const (Conic0) :
           drawConic0(gmkData.data[key].obj, canvas);
-        case const (ffi.Double) :
+        case const (num) :
           drawText(gmkData.data[key].obj.toString(), Vec(gmkData.data[key].obj,0), 12, 500, canvas);
         case const (String) :
           drawText(gmkData.data[key].obj.toString(), Vec(0,0), 12, 500, canvas);
 
           default:
-            drawText('drawGMKData - error', Vec(0,0), 12, 500, canvas);
+            drawText('error: $key', Vec(0,0), 12, 500, canvas);
       }
 
     }

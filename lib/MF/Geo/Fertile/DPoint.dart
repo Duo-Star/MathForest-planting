@@ -13,4 +13,9 @@ class DPoint {
 
   Vec get mid => (p1 + p2) / 2;
 
+  @override
+  String toString() {
+    return 'DPoint(${p1.toString()}, ${p2.toString()})';
+  }
+
 }

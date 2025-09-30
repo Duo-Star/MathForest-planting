@@ -38,6 +38,8 @@ class Conic0 {
   Vec p;
   Vec u;
   Vec v;
+
+  String get type => "Conic0";
   //conic0: p + cos(θ)*u + sin(θ)*v
   Conic0([Vec? p, Vec? u, Vec? v]): //中心，共轭方向1，共轭方向2
         p = p ?? Vec(),
@@ -157,7 +159,7 @@ class Conic0 {
     return P.dis(pClosestP2P(P));
   }
 
-  String get type => "Conic0";
+
 
   Conic get conic => Conic().byConic0(this);
 

@@ -7,7 +7,7 @@ import '../Conic/XLine.dart';
 import '../Linear/Plane.dart';
 import '../Linear/Vec.dart';
 import '../Linear/Line.dart';
-import '../Conic/Circle.dart';
+import '../Conic/Cir2.dart';
 import '../Conic/Conic0.dart';
 import '../Fertile/DPoint.dart';
 
@@ -25,7 +25,7 @@ Vec Line_Line(Line la, Line lb) {
   return lb.indexPoint(xy.$2);
 }
 
-DNum Circle_Line_theta(Circle c, Line l) {
+DNum Cir2_Line_theta(Cir2 c, Line l) {
   if (l.v.x == 0) {
     //排除分母为零的情况
     return EquSolver.solveCosSinForMainRoot(c.r, 0, c.p.x - l.p.x);
@@ -39,12 +39,12 @@ DNum Circle_Line_theta(Circle c, Line l) {
   }
 }
 
-DPoint Circle_Line(Circle c, Line l) {
-  DNum theta12 = Circle_Line_theta(c, l);
+DPoint Cir2_Line(Cir2 c, Line l) {
+  DNum theta12 = Cir2_Line_theta(c, l);
   return c.indexPoints(theta12);
 }
 
-DNum Circle_Circle_theta(Circle c1, Circle c2) {
+DNum Cir2_Cir2_theta(Cir2 c1, Cir2 c2) {
   DNum theta = EquSolver.solveCosSinForMainRoot(
     2 * c2.p.x * c2.r - 2 * c1.p.x * c2.r,
     2 * c2.p.y * c2.r - 2 * c1.p.y * c2.r,
@@ -56,8 +56,8 @@ DNum Circle_Circle_theta(Circle c1, Circle c2) {
   return theta; //注意这里获取的theta是c2的
 }
 
-DPoint Circle_Circle(Circle c1, Circle c2) {
-  DNum theta = Circle_Circle_theta(c1, c2);
+DPoint Cir2_Cir2(Cir2 c1, Cir2 c2) {
+  DNum theta = Cir2_Cir2_theta(c1, c2);
   return c2.indexPoints(theta);
 }
 

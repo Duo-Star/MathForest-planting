@@ -49,14 +49,12 @@ class GMKCore {
     return input.replaceAll(regex, '');
   }
 
-  String substringBetween(String input, String startChar, String endChar) {
+  static String substringBetween(String input, String startChar, String endChar) {
     int startIndex = input.indexOf(startChar);
     int endIndex = input.indexOf(endChar);
-
     if (startIndex == -1 || endIndex == -1 || startIndex >= endIndex) {
       return ''; // 如果没找到起始或结束字符，返回空字符串
     }
-
     // 从起始字符的下一个位置开始，到结束字符的位置
     return input.substring(startIndex + startChar.length, endIndex);
   }

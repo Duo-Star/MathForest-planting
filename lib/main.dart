@@ -1,8 +1,12 @@
 import 'dart:async';
-import 'dart:ui' as ui;
+//import 'dart:ffi';
+import 'dart:ui' ;
 import 'dart:math' as math;
 import 'package:flutter/gestures.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' ;
+
+import 'package:learnfl/MF/Geo/Intersection/Ins.dart';
+import 'MF/Alg/EquSolver/EquSolver.dart' as EquSolver;
 import 'MF/main.dart';
 
 void main() {
@@ -90,52 +94,71 @@ class MyPainter extends CustomPainter {
     monxiv.drawFramework(canvas);
 
     //创建GMK核心
-    var gmkCore = GMKCore();
+    GMKCore gmkCore = GMKCore();
 
     //手动构建几何结构
+    /*
     var ags = GMKStructure([
       GMKProcess("P", "A", [-1, 2, 0]),
       GMKProcess("P", "B", [1, 3, 0]),
       GMKProcess("MidP", "C", ["A", "B"]),
       GMKProcess("Cir", "cir", ["A", "B"]),
-
     ]);
+     */
 
     //加载结构
     //gmkCore.loadStructure(ags);
 
     gmkCore.loadSourceStructure('''
-``我是注释``
-``我可以
+``我是注释,我可以
 换行``
 
-@x is Num of 1; //相当于ggb滑动条
-@A is P of <x>, 1; //<x> 数字插入
-@B is P of 3.1, 1; //对空格不再敏感
-@cir is Cir of <.o>, <B>; //.o 为预设值，表示原点
-/@M is MidP of <A>, <B>;
+@a is N of 1;
+@A is P of <a>, 1;
+@B is P of 2, -1;
+@cir is Cir of <A>, <B>;
+@M is MidP of <A>, <B>;
 @l is L of <A>,<B>;
-
-/@P1 is Ins of <l>,<cir>,1;
+@dP1 is Ins of <l>,<cir>;
 @c0_1 is C0 of <.o>,<A>,<B>;
-/@F12 is F of <c0_1>;
-/@xl_1 is XL of <A>,<F12>;
+@F12 is F of <c0_1>;
+
+
+/@cir11 is Cir of <new P<1,3>>, <B>;
 
 ``样式可选声明``
 #A color:blue, size:1, style:outline;
-
 
 ''');
 
     //print(gmkCore.outputSource);
 
     //运行
-    var gmkData = gmkCore.run;
+    GMKData gmkData = gmkCore.run;
 
-    //print(gmkCore.gmkData.data['x']?.obj.toString());
+    //print(gmkCore.gmkData.data['dP1']?.obj.toString());
 
     //画
     monxiv.drawGMKData(gmkData, canvas);
+
+
+/*
+    Vec A = Vec(1,1);
+    Vec B = Vec(2,-1);
+    Cir2 cir = Cir2(Vec(),2);
+    Line l = Line.new2P(A, B);
+    DPoint dP =  Ins(cir, l);
+    //print(dP.toString());
+
+    monxiv.drawPoint(A, canvas);
+    monxiv.drawPoint(B, canvas);
+    monxiv.drawCir2(cir, canvas);
+    monxiv.drawLine(l, canvas);
+    monxiv.drawDPoint(dP, canvas);
+
+ */
+
+
 
   }
 
@@ -180,6 +203,31 @@ class _MyHomePageState extends State<MyHomePage>
     setState(() {});
     Mambo mambo = Mambo(context, '曼波');
 
+    //Function print = mambo.ha;
+
+    num dissolve(num x, num m, num n){
+      num OoOoO = mod(x, pow(m,n));
+      num oOoOo = pow(m,n-1);
+      print(OoOoO);
+      print(oOoOo);
+      return floor(OoOoO/oOoOo);
+    }
+
+    for(int i = 33; i<35; i++){
+      print('$i  ${dissolve(10, 5, i)}');
+    }
+
+
+
+
+
+
+
+    //var aaa = EquSolver. solveCosSinForMainRoot(1,1,-1);
+    //print(aaa.toString());
+
+
+    /*
     //var dn = EquSolver.solveComplexQuadratic(i, i, i);
 
     //创建GMK核心
@@ -204,6 +252,8 @@ class _MyHomePageState extends State<MyHomePage>
     //monxiv.drawGMKData(gmkData, canvas);
 
     mambo.ha(gmkCore.outputSource);
+
+     */
 
 
   }

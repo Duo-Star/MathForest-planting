@@ -43,6 +43,15 @@ asin(x) => funcs.asin(x);
 atan(x) => funcs.atan(x);
 atan2(x,y) => funcs.atan2(x,y);
 sin(x) => funcs.sin(x);
+cos(x) => funcs.cos(x);
+
+pow(x, y)=> funcs.pow(x, y);
+floor(x)=> funcs.floor(x);
+ceil(x)=> funcs.ceil(x);
+mod(x,y)=> funcs.mod(x,y);
+
+
+
 
 factorial(n) => funcs.factorial(n);
 fibonacci(n) => funcs.fibonacci(n);

@@ -10,6 +10,7 @@ export 'Linear/Triangle.dart';
 
 //几何-圆锥曲线
 export 'Conic/Circle.dart';
+export 'Conic/Cir2.dart';
 export 'Conic/Conic0.dart';
 export 'Conic/Conic1.dart';
 export 'Conic/Conic2.dart';

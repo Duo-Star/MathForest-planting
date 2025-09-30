@@ -1,7 +1,6 @@
 import 'dart:ui';
 import 'MColor.dart' as MColor;
 
-
 class GraphOBJ {
   dynamic obj;
   bool isSelect = false;
@@ -10,5 +9,6 @@ class GraphOBJ {
   String name = "Mambo?";
 
   GraphOBJ(this.obj);
+
 
 }

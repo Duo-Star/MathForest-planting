@@ -1,6 +1,8 @@
 //Vec
 import 'dart:math' as math;
 import 'dart:ui';
+import 'package:learnfl/MF/main.dart';
+
 import 'Angle.dart';
 
 class Vec {
@@ -71,7 +73,12 @@ class Vec {
   num get pow2 => this ^ 2;
   num get len => math.sqrt(x * x + y * y + z * z);
   Vec get unit => len > 0 ? this / len : Vec.zero();
-  Offset get offset => Offset(x.toDouble(), y.toDouble());
+  Offset get offset {
+    if (x.isNaN || y.isNaN) {
+      return Offset(1/0, 1/0);
+    }
+    return Offset(x.toDouble(), y.toDouble());
+  }
 
   (num, num) RSV(Vec a, Vec b) {
     Vec p = this;

@@ -57,6 +57,10 @@ atanh( x) {// 反双曲正切函数
   return 0.5 * math.log((1 + x) / (1 - x));
 }
 
+num floor(num x) => x.floor();
+num ceil(num x) => x.ceil();
+num mod(num x, num y) => x- floor(x/y)*y;
+num pow(num x, num y) => math.pow(x, y);
 
 /// 计算阶乘
 int factorial(int n) {
