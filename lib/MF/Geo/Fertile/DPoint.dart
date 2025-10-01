@@ -1,4 +1,5 @@
 import 'dart:math' as math ;
+import '../Linear/Line.dart';
 import '../Linear/Vec.dart';
 
 class DPoint {
@@ -12,6 +13,8 @@ class DPoint {
         p2 = (p ?? Vec.zero()) - (v ?? Vec(1, 0));
 
   Vec get mid => (p1 + p2) / 2;
+
+  Line get l => Line.new2P(p1, p2);
 
   @override
   String toString() {

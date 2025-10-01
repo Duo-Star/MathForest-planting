@@ -5,7 +5,7 @@ import 'dart:math' as math;
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart' ;
 
-import 'package:learnfl/MF/Geo/Intersection/Ins.dart';
+import 'MF/Geo/Intersection/Ins.dart';
 import 'MF/Alg/EquSolver/EquSolver.dart' as EquSolver;
 import 'MF/main.dart';
 
@@ -21,6 +21,7 @@ class SingleChoice extends StatefulWidget {
 }
 
 enum Calendar { day, week, month, year }
+
 
 class _SingleChoiceState extends State<SingleChoice> {
   Calendar calendarView = Calendar.day;
@@ -122,6 +123,11 @@ class MyPainter extends CustomPainter {
 @dP1 is Ins of <l>,<cir>;
 @c0_1 is C0 of <.o>,<A>,<B>;
 @F12 is F of <c0_1>;
+
+@QNum_1 is QNum of 1,2,3,4;
+@QP_1 is Index of <cir>,<QNum_1>;
+
+
 
 
 /@cir11 is Cir of <new P<1,3>>, <B>;

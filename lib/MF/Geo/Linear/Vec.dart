@@ -99,7 +99,10 @@ class Vec {
     z * other.x - x * other.z,
     x * other.y - y * other.x,
   );
+
   num dis(Vec other) => (this - other).len;
+
+  Vec angB(Vec other) => (unit + other.unit);
 
   @override
   String toString() => 'Vec($x, $y, $z)';

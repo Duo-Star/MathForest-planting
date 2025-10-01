@@ -67,6 +67,7 @@ class GMKCore {
       //GMKProcess(this.method, this.label, this.factor);
       if (line.startsWith('@')) {
         //剔除首尾空格 - trim()
+
         String label = substringBetween(line, '@', ' is ').trim();
         String method = substringBetween(line, ' is ', ' of ').trim();
         List<dynamic> factor = str2Factor(substringBetween(line, ' of ', ';'));

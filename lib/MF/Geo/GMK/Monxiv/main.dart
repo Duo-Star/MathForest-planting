@@ -259,18 +259,9 @@ class Monxiv {
 
 
 
-
-
-
-
-
-
-
-
-
   // 处理缩放开始
   void handleScaleStart(ScaleStartDetails details) {
-    print('开始移动');
+    //print('开始移动');
     _isDragging = true;
     _startLocalPosition = details.localFocalPoint;
     _startMonxivP = Vec(p.x, p.y); // 保存当前平移状态
@@ -302,7 +293,7 @@ class Monxiv {
 
   // 处理滚轮缩放
   void handlePointerSignal(PointerSignalEvent event) {
-    print('滚轮缩放');
+    //print('滚轮缩放');
     if (event is PointerScrollEvent) {
       double zoomFactor = event.scrollDelta.dy > 0 ? 0.9 : 1.1;
       double newScale = lam * zoomFactor;

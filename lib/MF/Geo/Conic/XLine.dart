@@ -5,9 +5,9 @@ import '../Fertile/DPoint.dart';
 import '../../Alg/Fertile/DNum.dart';
 
 class XLine {
-  final Vec p;
-  final Vec u;
-  final Vec v;
+  Vec p;
+  Vec u;
+  Vec v;
 
   //XLine: Line(p, u) ^^ Line(p, v)
   XLine([Vec? p, Vec? u, Vec? v]):
