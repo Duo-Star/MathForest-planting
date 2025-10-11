@@ -2,7 +2,7 @@
 
 用于dart的数学森林库，包含数学函数，方程，复数，微分，向量，矩阵，圆锥曲线，二次曲面，共生几何，射影几何，统计，概率，物理计算引擎
 
-<a href="https://github.com/Duo-Star/MathForest-planting/blob/main/logo-1.png"><img src="logo-1.png" height="330px"/></a>
+<a><img src="logo-1.png" height="330px"/></a>
 
 > [!NOTE]
 > 开发中...
